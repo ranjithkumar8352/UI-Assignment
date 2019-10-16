@@ -1,3 +1,5 @@
+import * as Animatable from 'react-native-animatable';
+
 import {
   ActivityIndicator,
   Image,
@@ -22,7 +24,7 @@ export default class Subscriptions extends Component {
     couponInput: '',
   };
   render() {
-    const { selectedPlan } = this.state;
+    const { selectedPlan, couponApplied } = this.state;
     return (
       <LinearGradient colors={['#F2D3B2', '#8D81FB']} style={styles.gradientBg}>
         <ScrollView contentContainerStyle={styles.container}>
@@ -41,6 +43,8 @@ export default class Subscriptions extends Component {
                 price={5.99}
                 isSelected={selectedPlan === 'monthly'}
                 onSelect={this.onPlanSelect}
+                couponApplied={couponApplied}
+                animDuration={couponAnimDuration}
               />
             </View>
             <Text style={styles.pricingCaption}>OR</Text>
@@ -50,6 +54,8 @@ export default class Subscriptions extends Component {
                 price={49.99}
                 isSelected={selectedPlan === 'yearly'}
                 onSelect={this.onPlanSelect}
+                couponApplied={couponApplied}
+                animDuration={couponAnimDuration}
               />
             </View>
           </View>
@@ -76,12 +82,15 @@ export default class Subscriptions extends Component {
       return <ActivityIndicator color="white" size="small" />;
     } else if (this.state.couponApplied) {
       return (
-        <View style={styles.couponAppliedBlock}>
-          <AntIcon name="clockcircle" size={12} color="white" />
+        <Animatable.View
+          animation="fadeIn"
+          delay={couponAnimDuration}
+          style={styles.couponAppliedBlock}>
+          <AntIcon name="clockcircle" size={15} color="white" />
           <Text style={styles.couponAppliedText}>
             Coupon valid for <Text style={styles.bold}>10hrs 22mins</Text>
           </Text>
-        </View>
+        </Animatable.View>
       );
     } else {
       return (
@@ -238,6 +247,7 @@ const styles = StyleSheet.create({
   couponAppliedBlock: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   couponAppliedText: {
     textAlign: 'center',
@@ -271,3 +281,5 @@ const features = [
       'Donec laoreet suscipit vehicula. Morbi ullamcorper ipsum magna, velvenenatis lectus sagittis et. Nunc pulvinar',
   },
 ];
+
+const couponAnimDuration = 1500;

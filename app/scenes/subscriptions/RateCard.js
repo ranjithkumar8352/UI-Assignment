@@ -1,3 +1,5 @@
+import * as Animatable from 'react-native-animatable';
+
 import {
   ImageBackground,
   StyleSheet,
@@ -14,7 +16,7 @@ type Props = { plan?: string, onSelect?: Function };
 export default class RateCard extends Component<Props> {
   render() {
     const isMonthly = this.props.plan === 'monthly';
-    const isSelected = this.props.isSelected;
+    const { isSelected, couponApplied, animDuration } = this.props;
     const [dollars, cents] = this.props.price.toString().split('.');
     return (
       <TouchableOpacity onPress={this.onSelect} activeOpacity={0.8}>
@@ -51,8 +53,17 @@ export default class RateCard extends Component<Props> {
               {cents ? '.' : null}
               {cents ? <Text style={styles.cents}>{cents}</Text> : null}
             </Text>
-            <Text style={styles.daysFree}>7 Days Free</Text>
           </View>
+          {couponApplied ? (
+            <Animatable.Text
+              style={[styles.daysFree, styles.extraDaysFree]}
+              animation={extraDaysAnimation}
+              duration={animDuration}>
+              30 Days Free
+            </Animatable.Text>
+          ) : (
+            <Text style={styles.daysFree}>7 Days Free</Text>
+          )}
         </View>
       </TouchableOpacity>
     );
@@ -67,7 +78,6 @@ export default class RateCard extends Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
     backgroundColor: 'white',
     elevation: 4,
     borderRadius: 10,
@@ -95,7 +105,7 @@ const styles = StyleSheet.create({
   },
   ribbonContainer: {
     height: 21,
-    marginVertical: 6,
+    marginTop: 6,
     alignItems: 'flex-end',
   },
   ribbon: {
@@ -114,6 +124,7 @@ const styles = StyleSheet.create({
     color: '#707070',
     fontSize: 28,
     fontFamily: 'Lato-Bold',
+    marginVertical: 3,
   },
   cents: {
     fontSize: 20,
@@ -129,7 +140,30 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontFamily: 'Lato-Regular',
     color: '#707070',
-    marginTop: 2,
     marginBottom: 5,
+    paddingLeft: 15,
+  },
+  extraDaysFree: {
+    color: 'white',
+    paddingVertical: 1,
   },
 });
+
+const extraDaysAnimation = {
+  0: {
+    scale: 0.2,
+    backgroundColor: 'rgba(14, 217, 131, 1)',
+  },
+  0.3: {
+    scale: 1,
+    backgroundColor: 'rgba(14, 217, 131, 1)',
+  },
+  0.9: {
+    scale: 1,
+    backgroundColor: 'rgba(14, 217, 131, 1)',
+  },
+  1: {
+    scale: 1,
+    backgroundColor: 'rgba(190, 190, 190, 1)',
+  },
+};
