@@ -40,8 +40,9 @@ const styles = StyleSheet.create({
   featureTitle: {
     fontSize: 16,
     lineHeight: 19,
-    color: '#707070',
+    color: '#606060',
     fontFamily: 'Lato-Bold',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   featureImage: {
